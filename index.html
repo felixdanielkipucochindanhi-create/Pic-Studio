@@ -1,1 +1,317 @@
+!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>picStudio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    /* RESET & BASE */
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #000;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+    a {text-decoration: none; color: inherit;}
 
+    /* HEADER */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #111;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.6);
+      transition: background 0.3s;
+    }
+    header.scrolled {background-color: #000;}
+    nav a {
+      margin-right: 25px;
+      font-weight: 700;
+      position: relative;
+      transition: color 0.3s;
+    }
+    nav a::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: #00bcd4;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+    nav a:hover {color: #00bcd4;}
+    nav a:hover::after {width: 100%;}
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .logo {height: 50px;}
+
+    /* Menu de três pontinhos */
+    .dots-menu {
+      font-size: 28px;
+      color: #fff;
+      margin-left: 20px;
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+      transition: color 0.3s;
+    }
+    .dots-menu:hover {color: #00bcd4;}
+    .dots-menu .dropdown {
+      display: none;
+      position: absolute;
+      top: 35px;
+      right: 0;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      z-index: 1000;
+      min-width: 150px;
+    }
+    .dots-menu .dropdown a {
+      display: block;
+      padding: 12px 15px;
+      color: #fff;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+    .dots-menu .dropdown a:hover {background: #222;}
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 140px 20px;
+      background: url('hero-bg.jpg') center/cover no-repeat fixed;
+      position: relative;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 1.2s ease-out;
+    }
+    .hero h1 {
+      font-size: 60px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    .hero p {
+      font-size: 20px;
+      color: #ccc;
+    }
+
+    /* SERVICES */
+    .services {
+      padding: 100px 20px;
+      text-align: center;
+      background: #0a0a0a;
+    }
+    .services h2 {
+      font-size: 36px;
+      margin-bottom: 60px;
+      color: #00bcd4;
+      animation: fadeIn 1.2s ease-out;
+    }
+    .cards {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    .card {
+      background: linear-gradient(145deg, #111, #1a1a1a);
+      padding: 30px 20px;
+      border-radius: 15px;
+      width: 300px;
+      transition: transform 0.4s, box-shadow 0.4s;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .card.visible {opacity: 1; transform: translateY(0);}
+    .card:hover {
+      transform: translateY(-15px) scale(1.05);
+      box-shadow: 0 15px 25px rgba(0,0,0,0.7);
+    }
+    .card h3 {margin-bottom: 15px; color: #00bcd4;}
+    .card p {color: #ccc;}
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 35px 20px;
+      background: #111;
+      color: #777;
+      margin-top: 50px;
+    }
+    .social-icons {
+      margin-top: 15px;
+    }
+    .social-icons a {
+      color: #fff;
+      margin: 0 10px;
+      font-size: 24px;
+      transition: color 0.3s;
+    }
+    .social-icons a:hover {color: #00bcd4;}
+
+    /* BOTÃO WHATSAPP FIXO */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #25D366;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 32px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+      z-index: 1000;
+      animation: bounce 2s infinite;
+    }
+    .whatsapp-btn:hover {
+      transform: scale(1.2);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+    }
+
+    /* ANIMAÇÕES */
+    @keyframes fadeInUp {
+      0% {opacity: 0; transform: translateY(40px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeIn {
+      0% {opacity: 0;}
+      100% {opacity: 1;}
+    }
+    @keyframes bounce {
+      0%, 100% {transform: translateY(0);}
+      50% {transform: translateY(-10px);}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#">Início</a>
+    <a href="#services">Serviços</a>
+    <a href="#contact">Contacto</a>
+  </nav>
+  <div class="header-right">
+    <img src="logo.png" alt="picStudio logo" class="logo">
+    <div class="dots-menu" onclick="toggleMenu()">
+      &#x22EE; <!-- ícone três pontos verticais -->
+      <div class="dropdown">
+        <a href="#">Sobre Nós</a>
+        <a href="#">Portfólio</a>
+        <a href="#">Blog</a>
+        <a href="#">Contato</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Bem-vindo à picStudio</h1>
+    <p>Fotografia profissional e edição de alta qualidade</p>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <h2>Nossos Serviços</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Fotografia</h3>
+      <p>Capturamos momentos únicos com qualidade profissional.</p>
+    </div>
+    <div class="card">
+      <h3>Edição</h3>
+      <p>Edição de imagens com acabamento moderno e limpo.</p>
+    </div>
+    <div class="card">
+      <h3>Estúdio</h3>
+      <p>Ambiente profissional para sessões fotográficas.</p>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <p>© 2026 picStudio - Todos os direitos reservados</p>
+  <div class="social-icons">
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-tiktok"></i></a>
+  </div>
+</footer>
+
+<div class="whatsapp-btn" onclick="abrirWhatsApp()">
+  &#x2709;
+</div>
+
+<script>
+    const whatsappBtn = document.querySelector('.whatsapp-btn');
+whatsappBtn.addEventListener('click', () => {
+  const numero = "351912345678"; // coloque seu número correto
+  const mensagem = "Olá, quero saber mais sobre os serviços da picStudio!";
+  const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+  // abre no mesmo tab, melhor compatibilidade mobile
+  window.location.href = url;
+});
+    
+    
+  // Botão 
+  // Dropdown três pontinhos
+  function toggleMenu() {
+    const dropdown = document.querySelector('.dots-menu .dropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
+  window.addEventListener('click', function(e) {
+    const menu = document.querySelector('.dots-menu');
+    const dropdown = document.querySelector('.dots-menu .dropdown');
+    if (!menu.contains(e.target)) dropdown.style.display = 'none';
+  });
+
+  // Animação cards on scroll
+  const cards = document.querySelectorAll('.card');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, {threshold: 0.2});
+  cards.forEach(card => observer.observe(card));
+
+  // Header muda cor ao scroll
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    if(window.scrollY > 50) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  });
+</script>
+
+</body>
+</html>
